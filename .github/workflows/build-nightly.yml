@@ -168,7 +168,6 @@ jobs:
     strategy:
       matrix:
         target: [Replace, Coexist, Optimized, Legacy]
-    continue-on-error: true
     name: "Android (${{ matrix.target }})"
     env:
       TARGET: ${{ matrix.target }}
@@ -219,7 +218,6 @@ jobs:
     if: github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'windows'
     runs-on: ${{ matrix.runs-on }}
     name: "Windows ${{ matrix.target }} ${{ matrix.toolchain }} (${{ matrix.arch }})"
-    continue-on-error: true
     strategy:
       matrix:
         include:
@@ -344,7 +342,6 @@ jobs:
     strategy:
       matrix:
         target: [arm64]
-    continue-on-error: true
     env:
       TARGET: ${{ matrix.target }}
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -401,7 +398,6 @@ jobs:
     strategy:
       matrix:
         target: [FreeBSD, FreeBSD-PGO]
-    continue-on-error: true
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_COMPILERCHECK: content
