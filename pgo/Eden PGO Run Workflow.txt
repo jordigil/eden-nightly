@@ -1,20 +1,11 @@
-Launching directly into ROM to avoid profiling the Eden Menu
--g "path to rom"
 
-2025-10-19 d24db9c3cb - 2025-10-20 d24db9c3cb Eden PGO Workflow Run:
+2025-10-22 master-71241b7560-27871
 
-26 Minutes TOTK Stress Test All Benchmark
-37 Minutes TOTK Stress Test All Benchmark
-28 Minutes TOTK Gameplay
-07 Minutes Crisis Core - FF7 Gameplay
-36 Minutes MK8Deluxe
-10 Minutes Dave the Diver
-20 Minutes Luigi Mansion 3
-13 Minutes Pokémon Legends Z-A
-11 Minutes THPS1+2
-11 Minutes BOTW
-10 Minutes Mario Party Jamboree
-10 Minutes Mario Odyssey
-12 Minutes Mario Wonder
-16 Minutes Mario 3D World Bowser's Fury
-10 Minutes TOTK Gameplay
+06 Minutes ASTRAL CHAIN
+17 Minutes Hyrule Warriors: Age of Calamity
+10 Minutes Luigi's Mansion 3
+10 Minutes Mario & Luigi: Brothership
+35 Minutes The Legend of Zelda: Tears of the Kingdom
+15 Minutes Romancing Saga 2
+50 Minutes XBC3
+
