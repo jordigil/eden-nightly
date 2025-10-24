@@ -1,4 +1,4 @@
-; Copyright Dolphin Emulator Project / Azahar Emulator Project / eden Emulator Project
+; Copyright Dolphin Emulator Project / Azahar Emulator Project / Eden Emulator Project / pflyly
 ; Licensed under GPLv3
 
 ; Require /DPRODUCT_TOOLCHAIN=<release-name> to makensis.
@@ -17,17 +17,18 @@
 !endif
 
 !define PRODUCT_NAME "Eden Nightly"
+!define PRODUCT_DISPLAY_NAME "${PRODUCT_NAME} (${PRODUCT_TOOLCHAIN})"
 !define PRODUCT_PUBLISHER "Eden Emulator Developers"
 !define PRODUCT_WEB_SITE "https://eden-emu.dev/"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}.exe"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_DISPLAY_NAME}.exe"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_DISPLAY_NAME}"
 !define BINARY_SOURCE_DIR "..\eden\build\bin"
 !define MUI_ICON "eden.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Setup MultiUser support:
 !define MULTIUSER_EXECUTIONLEVEL Highest
-!define MULTIUSER_INSTALLMODE_INSTDIR "${PRODUCT_NAME}"
+!define MULTIUSER_INSTALLMODE_INSTDIR "${PRODUCT_DISPLAY_NAME}"
 !define MULTIUSER_MUI
 !define MULTIUSER_INSTALLMODE_COMMANDLINE
 !define MULTIUSER_USE_PROGRAMFILES64
@@ -59,9 +60,9 @@ Var UnFinishPageDialog
 Var OpenLatestCheckbox
 Var OpenLatest
 
-Name "${PRODUCT_NAME}"
+Name "${PRODUCT_DISPLAY_NAME}"
 OutFile "Eden-${PRODUCT_VERSION}-Windows-${PRODUCT_TOOLCHAIN}-${PRODUCT_VARIANT}-Installer.exe"
-BrandingText "${PRODUCT_NAME} Installer v${PRODUCT_VERSION} (${PRODUCT_VARIANT})"
+BrandingText "${PRODUCT_DISPLAY_NAME} Installer v${PRODUCT_VERSION} (${PRODUCT_VARIANT})"
 SetCompressor /SOLID lzma
 ShowInstDetails show
 ShowUnInstDetails show
