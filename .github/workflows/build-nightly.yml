@@ -49,25 +49,25 @@ jobs:
           ./changelog.sh
 
       - name: Upload tag file
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: tag
           path: ~/tag
 
       - name: Upload count file
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: count
           path: ~/count
 
       - name: Upload changelog file
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: changelog
           path: ~/changelog
 
       - name: Upload source code
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: source
           path: artifacts
@@ -151,13 +151,13 @@ jobs:
           key: ${{ steps.restore-ccache-appimage.outputs.cache-primary-key }}
 
       - name: Upload appimage
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-${{ matrix.target}}-appimage
           path: eden/appimage
 
       - name: Upload appbundle
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-${{ matrix.target}}-appbundle
           path: eden/appbundle
@@ -209,7 +209,7 @@ jobs:
           key: ${{ steps.restore-ccache-cache.outputs.cache-primary-key }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-android-${{ matrix.target }}
           path: eden/src/android/artifacts/
@@ -324,13 +324,13 @@ jobs:
           key: ${{ steps.restore-ccache-windows.outputs.cache-primary-key }}
 
       - name: Upload Eden 7z
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-windows-${{ matrix.toolchain }}-${{ matrix.target }}-7z-${{ matrix.arch }}
           path: eden/build/artifacts/
 
       - name: Upload Eden installer
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-windows-${{ matrix.toolchain }}-${{ matrix.target }}-installer-${{ matrix.arch }}
           path: installer/artifacts/
@@ -379,7 +379,7 @@ jobs:
           ./eden-macos.sh
 
       - name: Upload
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-macos-${{ matrix.target }}
           path: eden/build/artifacts/
@@ -439,7 +439,7 @@ jobs:
           key: ${{ steps.restore-ccache-freebsd.outputs.cache-primary-key }}
 
       - name: Upload
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: eden-${{ matrix.target }}
           path: eden/build/artifacts/
@@ -454,7 +454,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v5.0.0
+      - uses: actions/download-artifact@v6.0.0
         with:
           pattern: "*"
           merge-multiple: true
