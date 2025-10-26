@@ -134,7 +134,7 @@ jobs:
         id: restore-ccache-appimage
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-ccache-${{ matrix.target }}-${{ github.sha }}
+          key: ${{ runner.os }}-ccache-${{ matrix.target }}-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-ccache-${{ matrix.target }}-
 
@@ -192,7 +192,7 @@ jobs:
         id: restore-ccache-cache
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-android-ccache-${{ matrix.target }}-${{ github.sha }}
+          key: ${{ runner.os }}-android-ccache-${{ matrix.target }}-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-android-ccache-${{ matrix.target }}-
 
@@ -296,7 +296,7 @@ jobs:
         id: restore-ccache-windows
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-ccache-${{ matrix.toolchain }}-${{ matrix.arch }}-${{ github.sha }}
+          key: ${{ runner.os }}-ccache-${{ matrix.toolchain }}-${{ matrix.arch }}-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-ccache-${{ matrix.toolchain }}-${{ matrix.arch }}-
 
@@ -359,7 +359,7 @@ jobs:
         id: restore-ccache-cache
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.sha }}
+          key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-ccache-
 
@@ -417,7 +417,7 @@ jobs:
         id: restore-ccache-freebsd
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.sha }}
+          key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-ccache-
 
