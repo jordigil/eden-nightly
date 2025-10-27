@@ -42,12 +42,6 @@ else
     )
 fi
 
-if [[ "${ARCH}" == "x86_64" ]]; then
-    EXTRA_CMAKE_FLAGS+=(
-    "-DYUZU_USE_BUNDLED_OPENSSL=OFF"
-    )
-fi
-
 COUNT="$(git rev-list --count HEAD)"
 
 if [[ "${TARGET}" == "PGO" ]]; then
@@ -81,7 +75,7 @@ if [[ "${TARGET}" == "normal" ]]; then
 fi
 
 # Gather dependencies
-windeployqt --release --openssl-root "C:\Program Files\OpenSSL" --no-compiler-runtime --no-opengl-sw --no-system-dxc-compiler --no-system-d3d-compiler --dir bin ./bin/eden.exe
+windeployqt --release --no-compiler-runtime --no-opengl-sw --no-system-dxc-compiler --no-system-d3d-compiler --dir bin ./bin/eden.exe
 
 # Delete un-needed debug files 
 find bin -type f -name "*.pdb" -exec rm -fv {} +
