@@ -20,13 +20,13 @@ git apply ../patches/update.patch
 declare -a EXTRA_CMAKE_FLAGS=()
 if [[ "${TARGET}" == "FreeBSD-PGO" ]]; then
     EXTRA_CMAKE_FLAGS+=(
-        "-DCMAKE_CXX_FLAGS=-O3 -pipe -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
-        "-DCMAKE_C_FLAGS=-O3 -pipe -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        "-DCMAKE_CXX_FLAGS=-Ofast -pipe -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        "-DCMAKE_C_FLAGS=-Ofast -pipe -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
     )
 else
     EXTRA_CMAKE_FLAGS+=(
-    "-DCMAKE_CXX_FLAGS=-O3 -pipe -fuse-ld=lld -w"
-    "-DCMAKE_C_FLAGS=-O3 -pipe -fuse-ld=lld -w"
+    "-DCMAKE_CXX_FLAGS=-Ofast -pipe -fuse-ld=lld -w"
+    "-DCMAKE_C_FLAGS=-Ofast -pipe -fuse-ld=lld -w"
     "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
     "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
     )

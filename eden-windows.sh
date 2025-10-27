@@ -20,15 +20,15 @@ if [[ "${TOOLCHAIN}" == "clang" ]]; then
         EXTRA_CMAKE_FLAGS+=(
             "-DCMAKE_C_COMPILER=clang-cl"
             "-DCMAKE_CXX_COMPILER=clang-cl"
-            "-DCMAKE_CXX_FLAGS=-O3 -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -Wno-backend-plugin -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date"
-            "-DCMAKE_C_FLAGS=-O3 -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -Wno-backend-plugin -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date"
+            "-DCMAKE_CXX_FLAGS=-Ofast -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -Wno-backend-plugin -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date"
+            "-DCMAKE_C_FLAGS=-Ofast -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -Wno-backend-plugin -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date"
         )
     else
         EXTRA_CMAKE_FLAGS+=(
             "-DCMAKE_C_COMPILER=clang-cl"
             "-DCMAKE_CXX_COMPILER=clang-cl"
-            "-DCMAKE_CXX_FLAGS=-O3"
-            "-DCMAKE_C_FLAGS=-O3"
+            "-DCMAKE_CXX_FLAGS=-Ofast"
+            "-DCMAKE_C_FLAGS=-Ofast"
             "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
             "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
         )

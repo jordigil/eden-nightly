@@ -22,8 +22,8 @@ cmake --fresh -G Ninja -S . -B build \
 -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_C_COMPILER=clang \
 -DCMAKE_CXX_COMPILER=clang++ \
--DCMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -fuse-ld=lld -fprofile-generate -w" \
--DCMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -fuse-ld=lld -fprofile-generate -w" \
+-DCMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -fuse-ld=lld -fprofile-generate -w" \
+-DCMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -fuse-ld=lld -fprofile-generate -w" \
 -DCMAKE_EXE_LINKER_FLAGS="-Wl,--as-needed" \
 -DCMAKE_SYSTEM_PROCESSOR=x86_64
 cmake --build build --parallel $(nproc)

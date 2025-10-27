@@ -14,8 +14,8 @@ PELF="https://github.com/xplshn/pelf/releases/latest/download/pelf_$ARCH"
 case "$1" in
     steamdeck)
         echo "Making Eden Optimized Build for Steam Deck"
-        CMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -flto=auto -fuse-ld=mold -w"
-        CMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
  		PROFILE="steamdeck"
    		EXTERNAL_SDL2="ON"
         TARGET="Steamdeck"
@@ -25,8 +25,8 @@ case "$1" in
         ;;
     steamdeck-pgo)
         echo "Making Eden PGO_Optimized Build for Steam Deck"
-        CMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
-        CMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
  		PROFILE="steamdeck"
    		EXTERNAL_SDL2="ON"
         TARGET="Steamdeck-PGO"
@@ -35,8 +35,8 @@ case "$1" in
         ;;
     rog)
         echo "Making Eden Optimized Build for ROG ALLY X"
-        CMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -flto=auto -fuse-ld=mold -w"
-        CMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
  		PROFILE="steamdeck"
    		EXTERNAL_SDL2="ON"
         TARGET="ROG_ALLY"
@@ -46,8 +46,8 @@ case "$1" in
         ;;
     rog-pgo)
         echo "Making Eden PGO Optimized Build for ROG ALLY X"
-        CMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
-        CMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
  		PROFILE="steamdeck"
    		EXTERNAL_SDL2="ON"
         TARGET="ROG_ALLY-PGO"
@@ -56,8 +56,8 @@ case "$1" in
         ;;
     common)
         echo "Making Eden Optimized Build for Modern CPUs"
-        CMAKE_CXX_FLAGS="-march=x86-64-v3 -O3 -pipe -flto=auto -fuse-ld=mold -w"
-        CMAKE_C_FLAGS="-march=x86-64-v3 -O3 -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_CXX_FLAGS="-march=x86-64-v3 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_C_FLAGS="-march=x86-64-v3 -Ofast -pipe -flto=auto -fuse-ld=mold -w"
         TARGET="Common"
 		CCACHE="ccache"
 		CC="gcc"
@@ -67,8 +67,8 @@ case "$1" in
         ;;
     common-pgo)
         echo "Making Eden PGO Optimized Build for Modern CPUs"
-        CMAKE_CXX_FLAGS="-march=x86-64-v3 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
-        CMAKE_C_FLAGS="-march=x86-64-v3 -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_CXX_FLAGS="-march=x86-64-v3 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_C_FLAGS="-march=x86-64-v3 -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
         TARGET="Common-PGO"
   		CC="clang"
 		CXX="clang++"
@@ -98,8 +98,8 @@ case "$1" in
         ;;
     aarch64)
         echo "Making Eden Optimized Build for AArch64"
-        CMAKE_CXX_FLAGS="-march=armv8-a -mtune=generic -O3 -pipe -flto=auto -fuse-ld=mold -w"
-        CMAKE_C_FLAGS="-march=armv8-a -mtune=generic -O3 -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_CXX_FLAGS="-march=armv8-a -mtune=generic -Ofast -pipe -flto=auto -fuse-ld=mold -w"
+        CMAKE_C_FLAGS="-march=armv8-a -mtune=generic -Ofast -pipe -flto=auto -fuse-ld=mold -w"
         TARGET="Linux"
 		CCACHE="ccache"
 		CC="gcc"
@@ -109,8 +109,8 @@ case "$1" in
         ;;
     aarch64-pgo)
         echo "Making Eden PGO Optimized Build for AArch64"
-        CMAKE_CXX_FLAGS="-march=armv8-a -mtune=generic -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
-        CMAKE_C_FLAGS="-march=armv8-a -mtune=generic -O3 -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_CXX_FLAGS="-march=armv8-a -mtune=generic -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
+        CMAKE_C_FLAGS="-march=armv8-a -mtune=generic -Ofast -pipe -flto=thin -fuse-ld=lld -fprofile-use=${GITHUB_WORKSPACE}/pgo/eden.profdata -fprofile-correction -w"
   		CC="clang"
 		CXX="clang++"
         TARGET="Linux-PGO"
