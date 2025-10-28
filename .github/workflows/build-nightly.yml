@@ -105,7 +105,9 @@ jobs:
           - target: legacy-pgo
             runs-on: ubuntu-latest
             ccache: 'flase'
-    container: ghcr.io/pkgforge-dev/archlinux:latest
+    container: 
+      image: ghcr.io/pkgforge-dev/archlinux:latest
+      options: --privileged --device /dev/fuse
     name: "Appimage (${{ matrix.target }})"
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
