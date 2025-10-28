@@ -49,8 +49,6 @@ Var CleanInstall
 Var BackupUserDataCheckbox
 Var BackupUserData
 Var CustomFinishPageDialog
-Var AssociateFilesCheckbox
-Var AssociateFiles
 Var LaunchEdenCheckbox
 Var LaunchEden
 Var UninstallerPageDialog
@@ -330,11 +328,7 @@ Function CustomFinishPageCreate
     Abort
   ${EndIf}
 
-  ${NSD_CreateCheckbox} 0u 0u 100% 12u "Associate Eden with .nsp, .xci files"
-  Pop $AssociateFilesCheckbox
-  ${NSD_SetState} $AssociateFilesCheckbox $AssociateFiles
-
-  ${NSD_CreateCheckbox} 0u 16u 100% 12u "Launch Eden after install"
+  ${NSD_CreateCheckbox} 0u 0u 100% 12u "Launch Eden after install"
   Pop $LaunchEdenCheckbox
   ${NSD_SetState} $LaunchEdenCheckbox $LaunchEden
 
@@ -342,7 +336,6 @@ Function CustomFinishPageCreate
 FunctionEnd
 
 Function CustomFinishPageLeave
-  ${NSD_GetState} $AssociateFilesCheckbox $AssociateFiles
   ${NSD_GetState} $LaunchEdenCheckbox $LaunchEden
   
   ${If} $LaunchEden == 1
@@ -489,7 +482,14 @@ FunctionEnd
 
 Section "Installation"
   SectionIn RO
+  ; Initial InstallMode context
+  ${If} $MultiUser.InstallMode == "AllUsers"
+    SetShellVarContext all
+  ${Else}
+    SetShellVarContext current
+  ${EndIf}
   
+  ; Perform clean install if selected
   ${If} $CleanInstall == 1
     ${If} $INSTDIR != ""
       ${If} ${FileExists} "$INSTDIR\eden.exe"
@@ -502,19 +502,27 @@ Section "Installation"
       ${EndIf}
         
       ; Attempt to clean AppData config if exists
+      ; Eden always uses current user context for AppData
       SetShellVarContext current
       ${If} ${FileExists} "$APPDATA\eden"
         DeleteRegKey HKCU "Software\eden"
         RMDir /r "$APPDATA\eden"
       ${EndIf}
-        
+      
+      ; Recover InstallMode context
+      ${If} $MultiUser.InstallMode == "AllUsers"
+        SetShellVarContext all
+      ${Else}
+        SetShellVarContext current
+      ${EndIf}
+
       ; Remove old start menu shortcuts
-      Delete "$SMPROGRAMS\${PRODUCT_NAME}\$(^Name).lnk"
-      Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall $(^Name).lnk"
-      RMDir  "$SMPROGRAMS\${PRODUCT_NAME}"
+      Delete "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\${PRODUCT_DISPLAY_NAME}.lnk"
+      Delete "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\Uninstall ${PRODUCT_DISPLAY_NAME}.lnk"
+      RMDir /r "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}"
 
       ; Remove old desktop shortcut
-      Delete "$DESKTOP\$(^Name).lnk" 
+      Delete "$DESKTOP\${PRODUCT_DISPLAY_NAME}.lnk" 
     ${EndIf}
   ${EndIf}
 
@@ -529,11 +537,11 @@ Section "Installation"
   File /r "${BINARY_SOURCE_DIR}\*"
 
   ; Create start menu and desktop shortcuts
-  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\$(^Name).lnk" "$INSTDIR\eden.exe"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall $(^Name).lnk" "$INSTDIR\uninst.exe" "/$MultiUser.InstallMode"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\${PRODUCT_DISPLAY_NAME}.lnk" "$INSTDIR\eden.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\Uninstall ${PRODUCT_DISPLAY_NAME}.lnk" "$INSTDIR\uninst.exe" "/$MultiUser.InstallMode"
   ${If} $DesktopShortcut == 1
-    CreateShortCut "$DESKTOP\$(^Name).lnk" "$INSTDIR\eden.exe"
+    CreateShortCut "$DESKTOP\${PRODUCT_DISPLAY_NAME}.lnk" "$INSTDIR\eden.exe"
   ${EndIf}
 
   SetAutoClose false
@@ -543,38 +551,9 @@ Section -RegisterUninstallerMetadata
   WriteUninstaller "$INSTDIR\uninst.exe"
 
   WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\eden.exe"
-  
-  ${If} $AssociateFiles == 1
-    ${If} $MultiUser.InstallMode == "AllUsers"
-      ; NSP association
-      WriteRegStr HKCR ".nsp" "" "eden.nsp"
-      WriteRegStr HKCR "eden.nsp" "" "Eden NSP File"
-      WriteRegStr HKCR "eden.nsp\DefaultIcon" "" "$INSTDIR\eden.exe,0"
-      WriteRegStr HKCR "eden.nsp\shell\open\command" "" '"$INSTDIR\eden.exe" "%1"'
-
-      ; XCI association
-      WriteRegStr HKCR ".xci" "" "eden.xci"
-      WriteRegStr HKCR "eden.xci" "" "Eden XCI File"
-      WriteRegStr HKCR "eden.xci\DefaultIcon" "" "$INSTDIR\eden.exe,0"
-      WriteRegStr HKCR "eden.xci\shell\open\command" "" '"$INSTDIR\eden.exe" "%1"'
-
-    ${Else}
-      ; NSP association
-      WriteRegStr HKCU "Software\Classes\.nsp" "" "eden.nsp"
-      WriteRegStr HKCU "Software\Classes\eden.nsp" "" "Eden NSP File"
-      WriteRegStr HKCU "Software\Classes\eden.nsp\DefaultIcon" "" "$INSTDIR\eden.exe,0"
-      WriteRegStr HKCU "Software\Classes\eden.nsp\shell\open\command" "" '"$INSTDIR\eden.exe" "%1"'
-
-      ; XCI association
-      WriteRegStr HKCU "Software\Classes\.xci" "" "eden.xci"
-      WriteRegStr HKCU "Software\Classes\eden.xci" "" "Eden XCI File"
-      WriteRegStr HKCU "Software\Classes\eden.xci\DefaultIcon" "" "$INSTDIR\eden.exe,0"
-      WriteRegStr HKCU "Software\Classes\eden.xci\shell\open\command" "" '"$INSTDIR\eden.exe" "%1"'
-    ${EndIf}
-  ${EndIf}
 
   ; Write metadata for add/remove programs applet
-  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_DISPLAY_NAME}"
   WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe /$MultiUser.InstallMode"
   WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\eden.exe"
   WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
@@ -588,12 +567,19 @@ Section -RegisterUninstallerMetadata
 SectionEnd
 
 Section Uninstall
+  
+  ; Set InstallMode context
+  ${If} $MultiUser.InstallMode == "AllUsers"
+    SetShellVarContext all
+  ${Else}
+    SetShellVarContext current
+  ${EndIf}
 
   ; Remove shortcuts
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall $(^Name).lnk"
-  Delete "$DESKTOP\$(^Name).lnk"
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\$(^Name).lnk"
-  RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
+  Delete "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\Uninstall ${PRODUCT_DISPLAY_NAME}.lnk"
+  Delete "$DESKTOP\${PRODUCT_DISPLAY_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}\${PRODUCT_DISPLAY_NAME}.lnk"
+  RMDir /r "$SMPROGRAMS\${PRODUCT_DISPLAY_NAME}"
     
   ${If} $CleanUninstall == 1
     ; Attempt to clean portable mode data if exists
@@ -602,11 +588,20 @@ Section Uninstall
     ${EndIf}
         
     ; Attempt to clean AppData config if exists
+    ; Eden always uses current user context for AppData
     SetShellVarContext current
     ${If} ${FileExists} "$APPDATA\eden"
       DeleteRegKey HKCU "Software\eden"
       RMDir /r "$APPDATA\eden"
     ${EndIf}
+    
+    ; Recover InstallMode context
+    ${If} $MultiUser.InstallMode == "AllUsers"
+      SetShellVarContext all
+    ${Else}
+       SetShellVarContext current
+    ${EndIf}
+
   ${EndIf}
     
   ; Remove installed files
@@ -621,27 +616,14 @@ Section Uninstall
   RMDir /r "$INSTDIR\styles"
   RMDir /r "$INSTDIR\tls"
   RMDir /r "$INSTDIR\translations"
-  RMDir "$INSTDIR"
-
-  ; Delete eden's file associations
-  ${If} $MultiUser.InstallMode == "AllUsers"
-    DeleteRegKey HKCR ".nsp"
-    DeleteRegKey HKCR ".xci"
-    DeleteRegKey HKCR "eden.nsp"
-    DeleteRegKey HKCR "eden.xci"
-  ${Else}
-    DeleteRegKey HKCU "Software\Classes\.nsp"
-    DeleteRegKey HKCU "Software\Classes\.xci"
-    DeleteRegKey HKCU "Software\Classes\eden.nsp"
-    DeleteRegKey HKCU "Software\Classes\eden.xci"
-  ${EndIf}
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.nsp"
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.xci"
+  RMDir /r "$INSTDIR"
 
   DeleteRegKey HKCU "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKCU "${PRODUCT_DIR_REGKEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_DISPLAY_NAME}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_DISPLAY_NAME}"
 
   SetAutoClose false
 SectionEnd

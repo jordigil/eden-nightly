@@ -328,7 +328,7 @@ jobs:
         working-directory: ${{ github.workspace }}/installer
         run: |
           set TOOLCHAIN=%TOOLCHAIN%
-          if /I "%TARGET%"=="PGO" set TOOLCHAIN=PGO-%TOOLCHAIN%
+          if /I "%TARGET%"=="PGO" set TOOLCHAIN=%TOOLCHAIN%-PGO
           makensis /DPRODUCT_TOOLCHAIN=%TOOLCHAIN% /DPRODUCT_VARIANT=%ARCH% /DPRODUCT_VERSION=%VERSION% eden.nsi
           mkdir artifacts 2>nul
           move /y *.exe artifacts\

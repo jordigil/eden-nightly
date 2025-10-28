@@ -62,7 +62,7 @@ fi
 COUNT="$(git rev-list --count HEAD)"
 
 if [[ "${TARGET}" == "PGO" ]]; then
-    EXE_NAME="Eden-${COUNT}-Windows-PGO-${TOOLCHAIN}-${ARCH}"
+    EXE_NAME="Eden-${COUNT}-Windows-${TOOLCHAIN}-PGO-${ARCH}"
 else
     EXE_NAME="Eden-${COUNT}-Windows-${TOOLCHAIN}-${ARCH}"
 fi
