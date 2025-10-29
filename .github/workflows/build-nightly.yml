@@ -165,6 +165,7 @@ jobs:
     if: github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'android'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         target: [Replace, Coexist, Optimized, Legacy]
     name: "Android (${{ matrix.target }})"
