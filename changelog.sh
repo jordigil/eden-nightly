@@ -55,7 +55,7 @@ echo "Full Changelog: [\`v0.0.3...master\`](${BASE_COMPARE_URL}/v0.0.3...master)
 echo >> "$CHANGELOG_FILE"
 
 # Generate release table
-echo "## Unofficial Nightly Release: ${COUNT}" >> "$CHANGELOG_FILE"
+echo "## Release table:" >> "$CHANGELOG_FILE"
 echo "| Platform | Normal builds | PGO optimized builds |" >> "$CHANGELOG_FILE"
 echo "|--|--|--|" >> "$CHANGELOG_FILE"
 echo "| Linux (AppImage) | [\`Common x86_64_v3\`](${BASE_DOWNLOAD_URL}/${TAG}/Eden-${COUNT}-Common-x86_64.AppImage)<br><br>\
