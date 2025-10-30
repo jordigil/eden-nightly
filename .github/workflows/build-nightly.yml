@@ -415,7 +415,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [FreeBSD, FreeBSD-PGO]
+        target: [FreeBSD]
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_COMPILERCHECK: content
@@ -430,7 +430,6 @@ jobs:
           git clone 'https://git.eden-emu.dev/eden-emu/eden.git' ./eden
 
       - name: Restore ccache
-        if: ${{ matrix.target == 'FreeBSD' }}
         uses: actions/cache/restore@v4
         id: restore-ccache-freebsd
         with:
@@ -450,7 +449,6 @@ jobs:
             ./eden-freeBSD.sh
 
       - name: Save ccache
-        if: ${{ matrix.target == 'FreeBSD' && github.ref_name == 'main' }}
         uses: actions/cache/save@v4
         with:
           path: ${{ env.CCACHE_DIR }}
