@@ -228,26 +228,26 @@ jobs:
              target: normal
              arch: x86_64
              runs-on: windows-2022
-           - toolchain: msvc
-             target: normal
-             arch: arm64
-             runs-on: windows-11-arm
-           - toolchain: clang
-             target: normal
-             arch: x86_64
-             runs-on: windows-2022
-           - toolchain: clang
-             target: PGO
-             arch: x86_64
-             runs-on: windows-2022
-           - toolchain: msys2
-             target: PGO
-             arch: x86_64
-             runs-on: windows-2022
-           - toolchain: msys2
-             target: normal
-             arch: x86_64
-             runs-on: windows-2022
+          # - toolchain: msvc
+          #   target: normal
+          #   arch: arm64
+          #   runs-on: windows-11-arm
+          # - toolchain: clang
+          #   target: normal
+          #   arch: x86_64
+          #   runs-on: windows-2022
+          # - toolchain: clang
+          #   target: PGO
+          #   arch: x86_64
+          #   runs-on: windows-2022
+          # - toolchain: msys2
+          #   target: PGO
+          #   arch: x86_64
+          #   runs-on: windows-2022
+          # - toolchain: msys2
+          #   target: normal
+          #   arch: x86_64
+          #   runs-on: windows-2022
     defaults:
       run:
         shell: ${{ matrix.toolchain == 'msys2' && 'msys2 {0}' || 'bash {0}' }}
