@@ -1,4 +1,5 @@
 name: Build
+
 concurrency:
   group: build-eden-${{ github.ref }}-${{ github.event.inputs.job_to_run || 'all' }}
   cancel-in-progress: true
@@ -15,7 +16,7 @@ on:
           - appimage
           - macos
           - android
-          - freebsd
+          - bsd
           - info
         default: 'all'
 
@@ -76,6 +77,7 @@ jobs:
     if: github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'appimage'
     runs-on: ${{ matrix.runs-on }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target: steamdeck
@@ -409,18 +411,19 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ steps.restore-ccache-cache.outputs.cache-primary-key }}
 
-  freebsd:
-    if: github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'freebsd'
-    name: FreeBSD
+  bsd:
+    if: github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'bsd'
+    name: ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        target: [FreeBSD]
+        target: [FreeBSD, Solaris]
     env:
+      TARGET: ${{ matrix.target }}
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_COMPILERCHECK: content
       CCACHE_SLOPPINESS: time_macros
-      TARGET: ${{ matrix.target }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
@@ -430,6 +433,7 @@ jobs:
           git clone 'https://git.eden-emu.dev/eden-emu/eden.git' ./eden
 
       - name: Restore ccache
+        if: matrix.target == 'FreeBSD'
         uses: actions/cache/restore@v4
         id: restore-ccache-freebsd
         with:
@@ -439,16 +443,28 @@ jobs:
             ${{ runner.os }}-${{ matrix.target }}-ccache-
 
       - name: Compile Eden FreeBSD
+        if: matrix.target == 'FreeBSD'
         uses: vmactions/freebsd-vm@v1.2.4
         with:
           usesh: true
-          envs: 'CCACHE_DIR TARGET'
+          envs: 'TARGET'
           run: |
-            chmod +x ./freeBSD-dependencies.sh ./eden-freeBSD.sh
-            ./freeBSD-dependencies.sh
-            ./eden-freeBSD.sh
+            chmod +x ./BSD-dependencies.sh ./eden-BSD.sh
+            ./BSD-dependencies.sh
+            ./eden-BSD.sh
+
+      - name: Compile Eden Solaris
+        if: matrix.target == 'Solaris'
+        uses: vmactions/solaris-vm@v1.1.5
+        with:
+          usesh: true
+          envs: 'TARGET'
+          run: |
+            chmod +x ./BSD-dependencies.sh ./eden-BSD.sh
+            ./BSD-dependencies.sh && ./eden-BSD.sh
 
       - name: Save ccache
+        if: matrix.target == 'FreeBSD'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -463,7 +479,7 @@ jobs:
   release:
     if: github.ref_name == 'main' && github.event.inputs.job_to_run == 'all'
     name: "release"
-    needs: [info, appimage, windows, macos, android, freebsd]
+    needs: [info, appimage, windows, macos, android, bsd]
     permissions:
       actions: read
       security-events: write
@@ -495,4 +511,4 @@ jobs:
           fail_on_unmatched_files: false
           make_latest: true
           files: |
-            *.AppImage*, *.AppBundle*, *.7z, *.tar.xz, *.exe, *.apk
+            *.AppImage*, *.AppBundle*, *.7z, *.tar.gz, *.exe, *.apk

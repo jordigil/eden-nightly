@@ -1,0 +1,61 @@
+diff --git a/externals/ffmpeg/CMakeLists.txt b/externals/ffmpeg/CMakeLists.txt
+index 59397f6acb..7845a8833e 100644
+--- a/externals/ffmpeg/CMakeLists.txt
++++ b/externals/ffmpeg/CMakeLists.txt
+@@ -25,18 +25,27 @@ if (UNIX AND NOT ANDROID)
+     if (NOT APPLE)
+         # In Solaris needs explicit linking for ffmpeg which links to /lib/amd64/libX11.so
+         if(PLATFORM_SUN)
+-            list(APPEND FFmpeg_HWACCEL_LIBRARIES
+-                X11
+-                "/usr/lib/xorg/amd64/libdrm.so")
++            find_library(LIBDRM_LIB libdrm PATHS /usr/lib/64 /usr/lib/amd64 /usr/lib)
++            if(LIBDRM_LIB)
++                list(APPEND FFmpeg_HWACCEL_LIBRARIES
++                    X11
++                    "${LIBDRM_LIB}")
++                message(STATUS "Found libdrm at: ${LIBDRM_LIB}")
++            else()
++                message(WARNING "libdrm not found, disabling libdrm support")
++                list(APPEND FFmpeg_HWACCEL_FLAGS
++                --disable-libdrm)
++            endif()
+         else()
+             pkg_check_modules(LIBDRM libdrm REQUIRED)
+             list(APPEND FFmpeg_HWACCEL_LIBRARIES
+                 ${LIBDRM_LIBRARIES})
+             list(APPEND FFmpeg_HWACCEL_INCLUDE_DIRS
+                 ${LIBDRM_INCLUDE_DIRS})
++            list(APPEND FFmpeg_HWACCEL_FLAGS
++                --enable-libdrm)
+         endif()
+-        list(APPEND FFmpeg_HWACCEL_FLAGS
+-            --enable-libdrm)
++
+     endif()
+ 
+     if(LIBVA_FOUND)
+@@ -250,7 +259,7 @@ else()
+         OUTPUT
+             ${FFmpeg_BUILD_LIBRARIES}
+         COMMAND
+-            make -j${SYSTEM_THREADS}
++            gmake -j${SYSTEM_THREADS}
+         WORKING_DIRECTORY
+             ${FFmpeg_BUILD_DIR}
+     )
+diff --git a/src/yuzu_cmd/CMakeLists.txt b/src/yuzu_cmd/CMakeLists.txt
+index 211b3141c2..01f1429d4d 100644
+--- a/src/yuzu_cmd/CMakeLists.txt
++++ b/src/yuzu_cmd/CMakeLists.txt
+@@ -55,6 +55,10 @@ if(WIN32)
+     endif()
+ endif()
+ 
++if(CMAKE_SYSTEM_NAME STREQUAL "SunOS" OR CMAKE_SYSTEM_NAME STREQUAL "Solaris")
++    target_link_libraries(yuzu-cmd PRIVATE ssp)
++endif()
++
+ if (MSVC)
+     include(CopyYuzuSDLDeps)
+     copy_yuzu_SDL_deps(yuzu-cmd)
